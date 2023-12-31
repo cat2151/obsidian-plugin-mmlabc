@@ -1,7 +1,7 @@
 {
-  "name": "obsidian-plugin-music-code-blocks",
-  "version": "1.4.0",
-  "description": "Obsidian plugin which renders ABC music notation from code blocks using the `abc` language specifier.",
+  "name": "obsidian-plugin-music-code-blocks-mmlabc",
+  "version": "0.0.0",
+  "description": "Obsidian plugin which renders music notation from code blocks using the mmlabc Music Macro Language specifier.",
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",

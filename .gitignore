@@ -6,5 +6,5 @@
 node_modules
 
 # build
-main.js
+#main.js #ひとまずreleaseのassetsを用意するまでのつなぎで、main.jsもcommit対象とする
 *.js.map

@@ -1,77 +1,49 @@
-# Obsidian ABC.JS plugin
+# これはなに？
+Obsidianで、Music Macro Languageを鳴らします
 
-Obsidian plugin which renders ABC music notation from code blocks using the `abc` language specifier.
+Chord notationも鳴らします
 
-Under the hood it uses [abcjs](https://paulrosen.github.io/abcjs/) library and supports all the features that abcjs provides.
+# どうやるの？
+Obsidianにinstallします
 
-## Examples
+Obsidianで以下のようにコードブロックを書きます
 
-### Simple song
+## MML (Music Macro Language)
 
-![Example music sheet](example.png)
+````
+```mml
+cde
+```
+````
 
-    ```music-abc
-    X:1
-    T:The Legacy Jig
-    M:6/8
-    L:1/8
-    R:jig
-    K:G
-    GFG BAB | gfg gab | GFG BAB | d2A AFD |
-    GFG BAB | gfg gab | age edB |1 dBA AFD :|2 dBA ABd |:
-    efe edB | dBA ABd | efe edB | gdB ABd |
-    efe edB | d2d def | gfe edB |1 dBA ABd :|2 dBA AFD |]
-    ```
+## Chord notation
 
-### Chorus music
+````
+```chord
+C
+```
+````
 
-    ```music-abc
-    X: 1
-    T: Chorus
-    V: T1 clef=treble name="Soprano"
-    V: T2 clef=treble name="Alto"
-    V: B1 clef=bass name="Tenor"
-    V: B2 clef=bass name="Bass"
-    L:1/8
-    K:G
-    P:First Part
-    [V: T1]"C"ed"Am"ed "F"cd"G7"gf |
-    [V: T2]GGAA- A2BB |
-    [V: B1]C3D- DF,3 |
-    [V: B2]C,2A,,2 F,,2G,,2 |
-    ```
+# なにを目指しているの？
+- Obsidianで、Music Macro Languageを鳴らします
+- Chord notation（chord2mmlによる）は実装の初期段階にあり、F,G,A,Bやマイナーコード等が鳴らないので、それらも鳴るようにしていきます
+- もし鳴らなくなった場合、できるだけ鳴るよう行動していくことを優先します、がabcjsに依存しているためabcjs次第なところがあります
 
-### Custom options
+# 目指さないものは？
+- 高品位。高品位Sound Fontの高サンプリングレート再生。
+- 高機能。あらゆる高度な編集を可能とする、大規模な統合された楽曲作成環境の構築。リアルタイムレコーディング。演奏しながら編集。FM音源エンジンやTone.jsなど他の波形合成エンジンを利用した多彩な音色やエフェクトの編集と再生環境の構築。あなたのObsidianをDAW同等のミュージックワークステーションに。
+- 高性能。スマートフォンを含むあらゆる環境で、巨大な楽曲を途切れずに演奏。
+- 安定性。破壊的変更のないMMLフォーマット。
+- 互換性。あらゆるMML方言を自動判別して自動変換。
 
-You can pass custom options to the `renderAbc` function by adding a JSON string at the top of the code block followed by `---`. Note that there may not be any whitespaces before or after the JSON.
+# install方法は？
+追々書いていきます
 
-![Custom options example music sheet with tablatures](example_tablatures.jpg)
+# fork元のREADMEはこちら
+[Obsidian ABC.JS plugin README](README_original.md)
 
-    ```music-abc
-    {
-      "tablature": [{"instrument": "violin"}]
-    }
-    ---
-    X:1
-    T: Cooley's
-    M: 4/4
-    L: 1/8
-    R: reel
-    K: G
-    |:D2|EB{c}BA B2 EB|~B2 AB dBAG|FDAD BDAD|FDAD dAFD|
-    ```
-
-When the JSON is invalid, the plugin will still try to render the music block but shows a big red banner at the top with the error so you can't miss it.
-
-For a full reference of all options you can use, have a look at the [official abcjs documentation](https://paulrosen.github.io/abcjs/visual/render-abc-options.html).
-
-## Maintenance & Contributions
-
-The plugin is maintained by the [abcjs-music](https://github.com/abcjs-music) organization of 
-volunteers, including Til Blechschmidt, the original author.
-If you have any feedback, please feel free to open an issue. If you know your way around source code, please consider making a pull request! All contributions are welcome.
-
-# Development
-
-Clone the repository, run `npm i` to install all the dependencies.
-`npm run build`, then copy main.js, manifest.json, and styles.css into your plugin directory (`.obsidian/plugins/<plugin-name>`)
+# fork元との関係
+- 大部分の機能を、fork元である [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs) に依存しています。
+- 当プラグインがやっているのは、トランスパイラ [mml2abc](https://github.com/cat2151/mml2abc) を利用し、ObsidianコードブロックのMMLを、abcjsが理解できる ABC Music notation に変換することです。
+- 同様に、[chord2mml](https://github.com/cat2151/chord2mml)を利用し、Chord notationをMMLに変換しています。
+- Obsidian ABC.JS pluginは、そしてそれが利用しているabcjsは、プレーンテキスト文字を入力するだけで五線譜の描画とSound FontによるPCMソフトシンセ演奏を可能にする、素晴らしいプロジェクトです。プロジェクトの皆様の活動に敬意を評します。

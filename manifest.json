@@ -1,10 +1,10 @@
 {
-	"id": "music-code-blocks",
-	"name": "ABC Music Notation",
-	"version": "1.4.0",
-	"minAppVersion": "0.9.15",
-	"description": "Obsidian plugin which renders ABC music notation from code blocks using the `abc` language specifier.",
-	"author": "Til Blechschmidt",
-	"authorUrl": "https://github.com/abcjs-music/obsidian-plugin-abcjs",
+	"id": "music-code-blocks-mmlabc",
+	"name": "Music Macro Language mmlabc",
+	"version": "0.0.0",
+	"minAppVersion": "0.0.0",
+	"description": "Obsidian plugin which renders music notation from code blocks using the mmlabc Music Macro Language specifier.",
+	"author": "cat2151",
+	"authorUrl": "https://github.com/cat2151/obsidian-plugin-mmlabc",
 	"isDesktopOnly": false
 }
