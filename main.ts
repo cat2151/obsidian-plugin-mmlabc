@@ -2,7 +2,7 @@ import { MarkdownPostProcessorContext, Plugin } from 'obsidian';
 import { PLAYBACK_CONTROLS_ID } from './cfg';
 import { PlaybackElement } from './playback_element';
 import { parse as mml2abc } from './mml/mml2abc';
-import { parse as chord2mml } from './mml/chord2mml';
+import { chord2mml } from './mml/chord2mml';
 
 export default class MusicPlugin extends Plugin {
 	onload() {
@@ -34,7 +34,7 @@ export default class MusicPlugin extends Plugin {
 	}
 
 	async codeProcessorChord(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) {
-		source = chord2mml(source);
+		source = chord2mml.parse(source);
 		source = mml2abc(source);
 		ctx.addChild(new PlaybackElement(el, source));
 	}
