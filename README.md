@@ -1,7 +1,7 @@
 # これはなに？
-Obsidianで、Music Macro Languageを鳴らします
+Obsidianで、MML（Music Macro Language）を鳴らします
 
-Chord notationも鳴らします
+コード進行（Chord notation）も鳴らします
 
 # どうやるの？
 Obsidianにinstallします
@@ -16,7 +16,7 @@ cde
 ```
 ````
 
-## Chord notation
+## コード進行（Chord notation）
 
 ````
 ```chord
@@ -26,7 +26,7 @@ C
 
 # なにを目指しているの？
 - Obsidianで、Music Macro Languageを鳴らします
-- Chord notation（chord2mmlによる）は実装の初期段階にあり、F,G,A,Bやマイナーコード等が鳴らないので、それらも鳴るようにしていきます
+- Obsidianで、コード進行を鳴らします
 - もし鳴らなくなった場合、できるだけ鳴るよう行動していくことを優先します、がabcjsに依存しているためabcjs次第なところがあります
 
 # 目指さないものは？
@@ -37,7 +37,8 @@ C
 - 互換性。あらゆるMML方言を自動判別して自動変換。
 
 # install方法は？
-追々書いていきます
+- 追々書いていきます
+- たぶん[Obsidian BRAT](https://github.com/TfTHacker/obsidian42-brat)で動きます
 
 # fork元のREADMEはこちら
 [Obsidian ABC.JS plugin README](README_original.md)
