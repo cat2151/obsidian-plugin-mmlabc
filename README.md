@@ -44,7 +44,7 @@ V7 I
 を参照ください。
     - テンプレートをドロップダウンリストから選べます。
     - 随時サンプル追加予定です。
-    - 実験段階のため、頻繁に破壊的変更があります。詳しくは[mml2abc](https://github.com/cat2151/mml2abc/)と[chord2mml](https://github.com/cat2151/chord2mml/)を参照ください。（当プラグインは、それらを取り込んでいるだけです）
+    - 実験段階のため、頻繁に破壊的変更があります。詳しくは[mml2abc commits](https://github.com/cat2151/mml2abc/commits/main/) と [chord2mml commits](https://github.com/cat2151/chord2mml/commits/main/)を参照ください。（当プラグインは、それらを取り込んでいるだけです。1週間ごとに取り込んでいます）
 
 # Installation
 - Obsidian に [BRAT（Beta Reviewers Auto-update Tester）](https://github.com/TfTHacker/obsidian42-brat)コミュニティプラグインをinstallします。
