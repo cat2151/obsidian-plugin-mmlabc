@@ -1,7 +1,7 @@
 {
 	"id": "music-code-blocks-mmlabc",
 	"name": "Music Macro Language mmlabc",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"minAppVersion": "0.0.0",
 	"description": "Obsidian plugin which renders music notation from code blocks using the mmlabc Music Macro Language specifier.",
 	"author": "cat2151",
