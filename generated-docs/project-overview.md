@@ -1,0 +1,683 @@
+Last updated: 2025-11-10
+
+# Project Overview
+
+## プロジェクト概要
+- Obsidian上でMML（Music Macro Language）やコード進行を記述し、五線譜の表示と音楽の再生を可能にするプラグインです。
+- 作曲のアイデアスケッチやフレーズの確認に利用でき、複数のペインで異なる音楽要素を扱えます。
+- MMLとコード進行はそれぞれ`mml2abc`および`chord2mml`によりABC Music notationに変換され、描画・再生されます。
+
+## 技術スタック
+- フロントエンド:
+    - **Obsidian API**: Obsidianプラグインとしての基盤を提供し、コードブロックの処理やUI要素の操作を可能にします。
+    - **abcjs (v6.2.2)**: ABC Music notationを五線譜として描画し、ソフトウェアシンセサイザーによる音声再生機能を提供する主要なライブラリです。
+- 音楽・オーディオ:
+    - **abcjs**: MMLやコード進行をABC Music notationとして解釈し、五線譜のレンダリングとPCMソフトシンセによる音楽再生を実行します。
+    - **mml2abc**: MML形式の音楽データをABC Music notation形式に変換するためのトランスパイラです。
+    - **chord2mml**: コード進行の表記をMML形式に変換するためのトランスパイラです。
+- 開発ツール:
+    - **TypeScript (v4.8.4)**: 静的型付けを導入し、大規模なプロジェクトでのコードの品質と保守性を向上させるためのプログラミング言語です。
+    - **tslib (v2.4.1)**: TypeScriptのコンパイル時に生成される、ヘルパー関数を提供するランタイムライブラリです。
+    - **@types/node (v18.11.9)**: Node.jsの型定義を提供し、TypeScript環境でのNode.js開発をサポートします。
+- テスト: N/A (提供情報なし)
+- ビルドツール:
+    - **Rollup (v2.79.1)**: JavaScriptモジュールバンドラー。複数のTypeScriptファイルを単一のJavaScriptファイル（`main.js`）に効率的にバンドルするために使用されます。
+    - **@rollup/plugin-typescript (v9.0.2)**: RollupでTypeScriptファイルを処理するためのプラグインです。
+    - **@rollup/plugin-node-resolve (v9.0.0)**: Rollupが`node_modules`内のモジュールを解決できるようにするプラグインです。
+    - **@rollup/plugin-commonjs (v15.1.0)**: CommonJSモジュールをESモジュールに変換し、Rollupでバンドルできるようにするプラグインです。
+- 言語機能:
+    - **TypeScript**: 静的型付けにより開発時のエラーを検出しやすくし、コードの可読性を高めます。
+    - **JavaScript**: ブラウザおよびObsidian環境でプラグインのロジックを実行する主要な言語です。
+- 自動化・CI/CD: N/A (提供情報なし)
+- 開発標準: N/A (提供情報なし)
+
+## ファイル階層ツリー
+```
+📄 .gitignore
+📄 LICENSE
+📖 README.md
+📖 README_original.md
+📄 _config.yml
+📘 cfg.ts
+📄 example.png
+📄 example_tablatures.jpg
+📁 generated-docs/
+📁 issue-notes/
+  📖 2.md
+  📖 3.md
+📜 main.js
+📘 main.ts
+📊 manifest.json
+📁 mml/
+  📜 chord2mml.js
+  📄 mml2abc.mjs
+📘 note_highlighter.ts
+📊 package-lock.json
+📊 package.json
+📘 playback_element.ts
+📜 rollup.config.js
+🎨 styles.css
+📊 tsconfig.json
+📁 typeDefs/
+  📘 abcjs.d.ts
+📊 versions.json
+📄 yarn.lock
+```
+
+## ファイル詳細説明
+- **.gitignore**: Gitによるバージョン管理から除外するファイルやディレクトリを指定する設定ファイルです。
+- **LICENSE**: 本プロジェクトのソフトウェアライセンス（利用条件）を記述したファイルです。
+- **README.md**: プロジェクトの概要、機能、使い方、インストール方法など、ユーザー向けの主要なドキュメントです。
+- **README_original.md**: このプラグインがフォークした元プロジェクト「Obsidian ABC.JS plugin」の元のREADMEファイルです。
+- **_config.yml**: GitHub Pagesなどの設定ファイルとして利用される可能性があります。
+- **cfg.ts**: プラグイン全体で使用される定数や設定値を定義するTypeScriptファイルです。特に`abcjs`関連の設定が含まれることがあります。
+- **example.png**, **example_tablatures.jpg**: プラグインの動作や出力例を示すためのスクリーンショット画像ファイルです。
+- **generated-docs/**: 自動生成されたドキュメントやレポートなどが格納されるディレクトリです。
+- **issue-notes/2.md**, **issue-notes/3.md**: 開発中に発生した課題や検討事項に関するメモがMarkdown形式で保存されています。
+- **main.js**: TypeScriptで書かれたプラグインのソースコード（`main.ts`など）と、依存するライブラリ（`abcjs`など）がRollupによってバンドル（結合）された最終的なJavaScriptファイルです。Obsidianプラグインとして実行される主要なコードが含まれています。
+- **main.ts**: Obsidianプラグインの主なロジックを実装するTypeScriptファイルです。Obsidianのコードブロックをフックし、MMLやコード進行を解析して五線譜表示・再生機能を提供します。
+- **manifest.json**: Obsidianプラグインのメタデータ（プラグインID、名前、バージョン、作者など）を定義するJSONファイルです。Obsidianがプラグインを認識・ロードするために必要です。
+- **mml/chord2mml.js**: コード進行のテキスト（例: `C F`）をMML形式に変換するためのJavaScriptライブラリです。
+- **mml/mml2abc.mjs**: MML形式の音楽データをABC Music notation形式に変換するためのJavaScriptライブラリです。
+- **note_highlighter.ts**: 音楽再生中に現在演奏中の音符を五線譜上でハイライト表示する機能に関連するTypeScriptファイルです。
+- **package-lock.json**: `package.json`に基づいて生成され、プロジェクトのすべての依存関係とその正確なバージョン、および依存関係ツリーの構造を記録するJSONファイルです。これにより、開発環境間での依存関係の一貫性が保たれます。
+- **package.json**: Node.jsプロジェクトのメタデータ（プロジェクト名、バージョン、スクリプトなど）と、直接の依存ライブラリ（`dependencies`と`devDependencies`）を定義するJSONファイルです。
+- **playback_element.ts**: 音楽再生用のUI要素（再生/停止ボタンなど）と、それに関連するロジックを管理するTypeScriptファイルです。`abcjs`と連携して五線譜の表示と音声再生を制御します。
+- **rollup.config.js**: プロジェクトのビルドツールであるRollupの設定ファイルです。どのファイルをバンドルするか、TypeScriptをJavaScriptに変換する方法などを定義します。
+- **styles.css**: プラグインによって表示されるUI要素（五線譜、再生コントロールなど）の見た目を定義するCSSファイルです。
+- **tsconfig.json**: TypeScriptコンパイラの設定ファイルです。TypeScriptコードをJavaScriptに変換する際のオプション（ターゲットECMAScriptバージョン、モジュール解決方法など）を定義します。
+- **typeDefs/abcjs.d.ts**: `abcjs`ライブラリのTypeScript型定義ファイルです。TypeScriptで`abcjs`を使用する際に、型チェックとIDEの補完機能を提供します。
+- **versions.json**: Obsidianプラグインのバージョン履歴とその互換性に関する情報を記録するJSONファイルです。
+- **yarn.lock**: Yarnパッケージマネージャーが使用するロックファイルで、`package-lock.json`と同様に依存関係の正確なバージョンを記録します。
+
+## 関数詳細説明
+本プラグインは、主に`main.ts`でObsidianプラグインとしてのコア機能を提供し、`playback_element.ts`と`note_highlighter.ts`でUIと再生・ハイライト機能を拡張しています。`main.js`と`mml/chord2mml.js`には、それぞれ`abcjs`ライブラリの大部分の機能、および`chord2mml`の変換ロジックが難読化された（または短縮された）形で含まれており、その詳細な引数や戻り値はプロジェクト情報からは特定できません。
+
+-   **onload()** (main.ts):
+    -   **役割**: Obsidianプラグインがロードされた際に実行される初期化関数。
+    -   **機能**: ObsidianのMarkdownコードブロックプロセッサを登録し、`mml`および`chord`タイプのコードブロックをこのプラグインで処理できるようにします。
+    -   **引数**: なし
+    -   **戻り値**: `Promise<void>` (非同期処理のため)
+
+-   **onunload()** (main.ts):
+    -   **役割**: Obsidianプラグインがアンロードされる際に実行されるクリーンアップ関数。
+    -   **機能**: プラグインが登録したMarkdownコードブロックプロセッサなど、不要になったリソースを解除し、メモリリークを防ぎます。
+    -   **引数**: なし
+    -   **戻り値**: `void`
+
+-   **codeProcessor(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext)** (main.ts):
+    -   **役割**: Obsidianの汎用Markdownコードブロック処理関数。
+    -   **機能**: コードブロックのソースコード（`source`）、出力先のHTML要素（`el`）、および処理コンテキスト（`ctx`）を受け取り、MMLまたはChord notationの形式を判別してそれぞれの専用プロセッサを呼び出します。
+    -   **引数**: `source` (string) - コードブロックのテキスト内容, `el` (HTMLElement) - 結果を表示するHTML要素, `ctx` (MarkdownPostProcessorContext) - Markdown処理のコンテキスト情報。
+    -   **戻り値**: `void`
+
+-   **codeProcessorMml(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext)** (main.ts):
+    -   **役割**: MMLコードブロック専用の処理関数。
+    -   **機能**: MML形式のソースコードを受け取り、`mml2abc`を使用してABC Music notationに変換します。その後、`abcjs`で五線譜を描画し、再生コントロールを追加して音楽再生を可能にします。
+    -   **引数**: `source` (string), `el` (HTMLElement), `ctx` (MarkdownPostProcessorContext) (上記`codeProcessor`と同様)
+    -   **戻り値**: `void`
+
+-   **codeProcessorChord(source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext)** (main.ts):
+    -   **役割**: Chord notationコードブロック専用の処理関数。
+    -   **機能**: コード進行のソースコードを受け取り、`chord2mml`でMMLに、さらに`mml2abc`でABC Music notationに変換します。その後、`abcjs`で五線譜を描画し、再生コントロールを追加します。
+    -   **引数**: `source` (string), `el` (HTMLElement), `ctx` (MarkdownPostProcessorContext) (上記`codeProcessor`と同様)
+    -   **戻り値**: `void`
+
+-   **constructor(containerEl: HTMLElement, app: App, ctx: MarkdownPostProcessorContext, text: string, codeType: string)** (playback_element.ts):
+    -   **役割**: `PlaybackElement`クラスのコンストラクタ。
+    -   **機能**: 音楽再生機能を持つUI要素を初期化します。表示するコンテナ、Obsidianアプリケーションインスタンス、Markdownコンテキスト、コードブロックのテキスト内容、およびコードのタイプ（MMLまたはChord）を受け取ります。
+    -   **引数**: `containerEl` (HTMLElement), `app` (App), `ctx` (MarkdownPostProcessorContext), `text` (string), `codeType` (string)。
+    -   **戻り値**: `PlaybackElement`インスタンス
+
+-   **onload()** (playback_element.ts):
+    -   **役割**: `PlaybackElement`がDOMにロードされた際に実行される初期化処理。
+    -   **機能**: 提供されたテキストとコードタイプに基づき、`abcjs`を呼び出して五線譜のレンダリングを行います。レンダリング後、音楽再生機能を有効にします。
+    -   **引数**: なし
+    -   **戻り値**: `Promise<void>`
+
+-   **onunload()** (playback_element.ts):
+    -   **役割**: `PlaybackElement`がDOMから削除される際に実行されるクリーンアップ処理。
+    -   **機能**: 再生中のオーディオを停止し、関連するイベントリスナーを解除するなど、リソースを解放します。
+    -   **引数**: なし
+    -   **戻り値**: `void`
+
+-   **renderError(containerEl: HTMLElement, error: string)** (playback_element.ts):
+    -   **役割**: エラーメッセージをUIに表示するヘルパー関数。
+    -   **機能**: 指定されたHTML要素内に、発生したエラーメッセージをユーザーが視覚的に認識できるようにレンダリングします。
+    -   **引数**: `containerEl` (HTMLElement) - エラーを表示する要素, `error` (string) - 表示するエラーメッセージ。
+    -   **戻り値**: `void`
+
+-   **enableAudioPlayback(abc: any, abcjsEl: HTMLElement, text: string)** (playback_element.ts):
+    -   **役割**: 音楽再生機能を有効にする関数。
+    -   **機能**: `abcjs`のシンセサイザーを初期化し、五線譜要素に対して再生コントロールを付与します。ユーザーはこれにより、五線譜をクリックして音楽を再生できるようになります。
+    -   **引数**: `abc` (any) - `abcjs`の楽譜オブジェクト, `abcjsEl` (HTMLElement) - 描画された五線譜のHTML要素, `text` (string) - 元のコードブロックテキスト。
+    -   **戻り値**: `Promise<void>`
+
+-   **togglePlayingHighlight(elements: any, className: string, index: number)** (note_highlighter.ts):
+    -   **役割**: 音楽再生中に特定の音符をハイライト表示/非表示を切り替える。
+    -   **機能**: 現在演奏中の音符に対応する五線譜上の要素に、ハイライト用のCSSクラスを適用または解除します。
+    -   **引数**: `elements` (any) - `abcjs`が提供する音符要素のリスト, `className` (string) - ハイライトに使用するCSSクラス名, `index` (number) - ハイライトする音符のインデックス。
+    -   **戻り値**: `void`
+
+-   **rmNoteHighlights()** (note_highlighter.ts):
+    -   **役割**: 現在表示されている音符のハイライトをすべて削除する。
+    -   **機能**: 以前に適用されたすべての音符ハイライトCSSクラスを削除し、五線譜を元の状態に戻します。
+    -   **引数**: なし
+    -   **戻り値**: `void`
+
+-   **rmAllHighlights()** (note_highlighter.ts):
+    -   **役割**: 全てのハイライトを削除する。
+    -   **機能**: `abcjs`の内部状態も含め、全てのハイライト表示をクリアします。
+    -   **引数**: なし
+    -   **戻り値**: `void`
+
+-   **constructor(control: any, target: HTMLElement, parser: any)** (note_highlighter.ts):
+    -   **役割**: `NoteHighlighter`クラスのコンストラクタ。
+    -   **機能**: 音符ハイライト機能を初期化します。再生コントロール、ハイライト対象のHTML要素、およびパースされた音楽データを受け取ります。
+    -   **引数**: `control` (any) - 再生コントロールオブジェクト, `target` (HTMLElement) - ハイライトを適用するターゲット要素, `parser` (any) - 音楽パーサーオブジェクト。
+    -   **戻り値**: `NoteHighlighter`インスタンス
+
+-   **onEvent(ev: any)** (note_highlighter.ts):
+    -   **役割**: `abcjs`の再生イベントに応答するイベントハンドラ。
+    -   **機能**: 音楽再生中に発生する`abcjs`のイベント（例: 新しい音符が演奏される）をリッスンし、それに基づいて音符のハイライト表示を更新します。
+    -   **引数**: `ev` (any) - `abcjs`から送られるイベントオブジェクト。
+    -   **戻り値**: `void`
+
+-   **main.js内の関数**:
+    -   `main.js`には、`abcjs`ライブラリのコア機能を含む、多数の関数が含まれています。これらは五線譜の描画、音符の解析、音楽のシンセサイザー生成、MIDI変換、UI要素の操作、および内部データ構造の管理など、広範な音楽処理タスクを担っています。具体的には、JavaScriptの非同期処理やクラス継承をサポートするヘルパー関数（`__extends`, `__awaiter`など）、音符のピッチ・長さの計算、拍子の処理、コードの解析、SVG要素の生成と操作、ユーザー入力（マウス、キーボード）への応答、音楽再生の制御など、数百に及ぶ低レベルな関数群がバンドルされています。これらのほとんどは`abcjs`ライブラリの内部実装であり、個別の詳細な説明は非常に専門的かつ膨大になるため、ここでは省略します。
+
+-   **mml/chord2mml.js内の関数**:
+    -   `mml/chord2mml.js`に含まれる関数（`t`, `e`, `n`など、難読化されている可能性が高い）は、コード進行のテキスト表記をMML形式に変換するための内部ロジックを構成します。これらは和音の解析、ルート音と度数に基づいた音符列の生成、テンポや音量などのMMLコマンドへの変換処理を担当します。詳細な引数や戻り値は提供情報からは読み取れません。
+
+## 関数呼び出し階層ツリー
+```
+- __extends (main.js)
+  - __ ()
+  - __awaiter ()
+  - adopt ()
+  - fulfilled ()
+  - rejected ()
+  - step ()
+  - __generator ()
+  - verb ()
+  - getLineEndTimings ()
+  - hideMeasures ()
+  - disappearMeasuresAfter ()
+  - disappearMeasuresBefore ()
+  - measureCallback ()
+  - getLineAndMeasure ()
+  - setCursor ()
+  - initializeFonts ()
+  - processNumberOnly ()
+  - parseStretchLast ()
+  - transposeChordName ()
+  - createKeyReverse ()
+  - relativeMajor$2 ()
+  - relativeMode$1 ()
+  - transposeKey$1 ()
+  - keyAccidentals$1 ()
+  - accidentalChange ()
+  - letter_to_overlay ()
+  - durationOfMeasure ()
+  - wrapLines ()
+  - addLineBreaks ()
+  - findLineBreaks ()
+  - freeFormLineBreaks ()
+  - clone ()
+  - oneTry ()
+  - optimizeLineWidths ()
+  - fixedMeasureLineBreaks ()
+  - getRevisedTuneParams ()
+  - calcLineWraps ()
+  - setDynamics ()
+  - numNotesToDecoration ()
+  - endingVolume ()
+  - insertTempoChanges ()
+  - chordVoiceOffThisBar ()
+  - getTrackTitle ()
+  - interpretTempo ()
+  - interpretMeter ()
+  - removeNaturals ()
+  - addKey ()
+  - addMeter ()
+  - addIfDifferent ()
+  - pitchesToPerc ()
+  - setChannel ()
+  - chordTrackEmpty ()
+  - timeToRealTime ()
+  - durationRounded ()
+  - preProcess ()
+  - getBeatFraction ()
+  - findChord ()
+  - calcBeat ()
+  - processVolume ()
+  - processChord ()
+  - findNoteModifications ()
+  - doModifiedNotes ()
+  - writeNote ()
+  - getRealDuration ()
+  - adjustPitch ()
+  - setKeySignature ()
+  - processGraceNotes ()
+  - writeGraceNotes ()
+  - adjustForMicroTone ()
+  - extractOctave ()
+  - extractNote ()
+  - interpretChord ()
+  - chordNotes ()
+  - writeBoom ()
+  - writeChick ()
+  - resolveChords ()
+  - normalizeDrumDefinition ()
+  - alignDrumToMeter ()
+  - writeDrum ()
+  - findOctaves ()
+  - delineTune ()
+  - findMismatchKeys ()
+  - replacer ()
+  - addMeterToVoices ()
+  - addKeyToVoices ()
+  - addClefToVoices ()
+  - addFontToVoices ()
+  - objEqual ()
+  - cloneLine ()
+  - copy ()
+  - computePickupLength ()
+  - addVerticalInfo ()
+  - makeSortedArray ()
+  - skipTies ()
+  - addEndPoints ()
+  - findLastBar ()
+  - fixTitles ()
+  - cleanUpSlursInLine ()
+  - fixClefPlacement ()
+  - wrapMusicLines ()
+  - getNextMusicLine ()
+  - addPositioning ()
+  - addFont ()
+  - appendLastMeasure ()
+  - addHintMeasure ()
+  - addHintMeasures ()
+  - StringTablature ()
+  - TabCommon ()
+  - VoiceElement ()
+  - AbsoluteElement ()
+  - RelativeElement ()
+  - isObject ()
+  - cloneObject ()
+  - cloneAbsolute ()
+  - cloneAbsoluteAndRelatives ()
+  - buildTabAbsolute ()
+  - lyricsDim ()
+  - TabAbsoluteElements ()
+  - getInitialStaffSize ()
+  - buildRelativeTabNote ()
+  - getXGrace ()
+  - graceInRest ()
+  - convertToNumber ()
+  - buildGraceRelativesForRest ()
+  - initSpecialY ()
+  - getLyricHeight ()
+  - buildTabName ()
+  - TabRenderer ()
+  - islastTabInStaff ()
+  - getStaffNumbers ()
+  - getParentStaffIndex ()
+  - linkStaffAndTabs ()
+  - isMultiVoiceSingleStaff ()
+  - getNextTabPos ()
+  - getLastStaff ()
+  - checkVoiceKeySig ()
+  - noteToMidi$2 ()
+  - midiToNote$1 ()
+  - TabNote ()
+  - cloneNote ()
+  - TabNotes ()
+  - buildCapo ()
+  - buildPatterns ()
+  - buildSecond ()
+  - sameString ()
+  - handleChordNotes ()
+  - noteToNumber ()
+  - toNumber ()
+  - invalidNumber ()
+  - StringPatterns ()
+  - ViolinPatterns ()
+  - Plugin$1 ()
+  - GuitarPatterns ()
+  - Plugin ()
+  - callback ()
+  - transposeOneTune ()
+  - changeAllKeySigs ()
+  - transposeVoices ()
+  - createKeyAccidentals ()
+  - setLetterDistance ()
+  - transposeVoice ()
+  - newKey ()
+  - transposePitch ()
+  - parseNote ()
+  - replaceNote ()
+  - replaceGrace ()
+  - replaceChord ()
+  - calcAdjustment ()
+  - BeamElem ()
+  - calcAverage ()
+  - BraceElem ()
+  - clefOffsets ()
+  - DynamicDecoration ()
+  - CrescendoElem ()
+  - GlissandoElem ()
+  - TieElem ()
+  - Decoration ()
+  - highestPitch ()
+  - lowestPitch ()
+  - compoundDecoration ()
+  - incrementPlacement ()
+  - getPlacement ()
+  - textDecoration ()
+  - symbolDecoration ()
+  - leftDecoration ()
+  - EndingElem ()
+  - TempoElement ()
+  - TripletElem ()
+  - germanNote ()
+  - translateChord ()
+  - getBeamGroup ()
+  - writeMeasureWidth ()
+  - setAveragePitch ()
+  - addRestToAbsElement ()
+  - addIfNotExist ()
+  - Svg ()
+  - constructHLine ()
+  - constructVLine ()
+  - createSvg ()
+  - setPaddingVariable ()
+  - FreeText ()
+  - Separator ()
+  - Subtitle ()
+  - addTextIf ()
+  - TopText ()
+  - BottomText ()
+  - setupSelection ()
+  - getCoord ()
+  - elementFocused ()
+  - keyboardDown ()
+  - keyboardSelection ()
+  - findElementInHistory ()
+  - findElementByCoord ()
+  - getBestMatchCoordinates ()
+  - getTarget ()
+  - getMousePosition ()
+  - attachMissingTouchEventAttributes ()
+  - mouseDown ()
+  - mouseMove ()
+  - mouseUp ()
+  - setSelection ()
+  - notifySelect ()
+  - findNumber ()
+  - clearSelection ()
+  - rangeHighlight ()
+  - getClassSet ()
+  - setClassSet ()
+  - addGlobalClass ()
+  - removeGlobalClass ()
+  - getBarYAt ()
+  - minStem ()
+  - calcSlant ()
+  - calcDy ()
+  - calcXPos ()
+  - calcYPos ()
+  - createStems ()
+  - createAdditionalBeams ()
+  - layoutTriplet ()
+  - isAbove ()
+  - heightAtMidpoint ()
+  - xAtMidpoint ()
+  - moveDecorations ()
+  - placeInLane ()
+  - setLaneForChord ()
+  - numAnnotationsBelow ()
+  - setLane ()
+  - yAtNote ()
+  - incTop ()
+  - setUpperAndLowerVoiceElements ()
+  - setUpperAndLowerAbsoluteElements ()
+  - setUpperAndLowerCrescendoElements ()
+  - setUpperAndLowerDynamicElements ()
+  - setUpperAndLowerEndingElements ()
+  - setUpperAndLowerTempoElement ()
+  - setUpperAndLowerRelativeElements ()
+  - VoiceElements ()
+  - getExtraWidth ()
+  - getMinWidth ()
+  - checkLastBarX ()
+  - finished ()
+  - getDurationIndex ()
+  - isSameStaff ()
+  - getLeftEdgeOfStaff ()
+  - addBraceSize ()
+  - setBraceLocation ()
+  - setLocation ()
+  - calcHorizontalSpacing ()
+  - centerWholeRests ()
+  - Classes ()
+  - GetFontAndAttr ()
+  - GetTextSize ()
+  - str_repeat ()
+  - roundNumber ()
+  - renderText ()
+  - drawBrace ()
+  - straightPath ()
+  - curvyPath ()
+  - curve ()
+  - printPath ()
+  - drawGlissando ()
+  - lineLength ()
+  - slope ()
+  - getY$1 ()
+  - numSquigglies ()
+  - segment ()
+  - drawCrescendo ()
+  - Group ()
+  - printSymbol ()
+  - kernSymbols ()
+  - drawDynamics ()
+  - drawTriplet ()
+  - drawLine ()
+  - drawBracket ()
+  - drawEnding ()
+  - drawTie ()
+  - drawBeam ()
+  - draw$1 ()
+  - getSlope ()
+  - getY ()
+  - printStem ()
+  - printLine ()
+  - printStaffLine ()
+  - drawRelativeElement ()
+  - scaleExistingElem ()
+  - drawTempo ()
+  - drawAbsolute ()
+  - drawVoice ()
+  - isNonSpacerRest ()
+  - printStaff ()
+  - printDebugBox ()
+  - drawSeparator ()
+  - nonMusic ()
+  - drawStaffGroup ()
+  - debugPrintGridItem ()
+  - printBrace ()
+  - addInvisibleMarker ()
+  - boxAllElements ()
+  - setPaperSize ()
+  - Selectables ()
+  - draw ()
+  - engraveStaffLine ()
+  - addStaffPadding ()
+  - splitSvgIntoLines ()
+  - duplicateSvg ()
+  - resizeOuter ()
+  - renderOne ()
+  - doLineWrapping ()
+  - registerAudioContext ()
+  - activeAudioContext ()
+  - supportsAudio ()
+  - bufferToWave ()
+  - setUint16 ()
+  - setUint32 ()
+  - centsToFactor ()
+  - placeNote ()
+  - CreateSynth ()
+  - resolveData ()
+  - setPan ()
+  - addSwing ()
+  - CreateSynthControl ()
+  - buildDom ()
+  - acResumerMiddleWare ()
+  - doNext ()
+  - attachListeners ()
+  - playEvent ()
+  - doPlay ()
+  - SynthController ()
+  - sleep ()
+  - setAttributes ()
+  - Midi ()
+  - encodeString ()
+  - keySignature ()
+  - timeSignature ()
+  - encodeHex ()
+  - toHex ()
+  - to7BitHex ()
+  - toDurationHex ()
+  - addNotes ()
+  - isFunction ()
+  - gatherAbcParams ()
+  - NoteHighlighter ()
+  - PlaybackElement ()
+  - getNoteLengthAbc ()
+  - decimalToFraction ()
+  - updateSharpFlats ()
+  - peg$subclass ()
+  - C ()
+  - peg$SyntaxError ()
+  - peg$padEnd ()
+  - hex ()
+  - literalEscape ()
+  - classEscape ()
+  - describeExpectation ()
+  - describeExpected ()
+  - describeFound ()
+  - peg$parse ()
+  - text ()
+  - peg$literalExpectation ()
+  - peg$classExpectation ()
+  - peg$endExpectation ()
+  - peg$otherExpectation ()
+  - peg$computePosDetails ()
+  - peg$computeLocation ()
+  - peg$fail ()
+  - peg$buildStructuredError ()
+  - peg$parseMMLs ()
+  - peg$parseMML ()
+  - peg$parseNOTE ()
+  - peg$parseREST ()
+  - peg$parseOCTAVE ()
+  - peg$parseOCTAVE_UP ()
+  - peg$parseOCTAVE_DOWN ()
+  - peg$parseNOTE_LENGTH ()
+  - peg$parseCHORD ()
+  - peg$parsePROGRAM_CHANGE ()
+  - peg$parseTEMPO ()
+  - peg$parseVOLUME ()
+  - peg$parseSTACCATO ()
+  - peg$parseTRANSPOSE ()
+  - peg$parseREPEAT ()
+  - peg$parseINLINE_ABC ()
+  - peg$parseTIME_SHIFT ()
+  - peg$parseTRACK_SEPARATOR ()
+  - peg$parsePITCH ()
+  - peg$parseSHARP ()
+  - peg$parseFLAT ()
+  - peg$parseMINUS ()
+  - peg$parseINTEGER ()
+  - peg$parse_ ()
+  - initTrackParams ()
+  - insertVolumeBeforeNoteOrRest ()
+  - volume2abc ()
+  - createAbc ()
+  - postProcess ()
+  - createCommonjsModule ()
+  - commonjsRequire ()
+  - t ()
+    - e ()
+      - n ()
+      - o ()
+      - s ()
+      - a ()
+      - _o ()
+      - Ho ()
+      - zo ()
+      - Wo ()
+      - Xo ()
+      - Yo ()
+      - Zo ()
+      - $o ()
+      - rs ()
+      - ts ()
+      - es ()
+      - ns ()
+      - os ()
+      - ss ()
+      - as ()
+      - us ()
+      - cs ()
+      - is ()
+      - fs ()
+      - ls ()
+      - hs ()
+      - bs ()
+      - u ()
+      - c ()
+      - i ()
+      - f ()
+      - l ()
+      - h ()
+      - b ()
+      - v ()
+      - d ()
+      - p ()
+      - A ()
+      - g ()
+      - m ()
+      - function ()
+      - switch ()
+      - if ()
+      - for ()
+      - filter ()
+      - sort ()
+      - map ()
+      - replace ()
+      - return ()
+  - MusicPlugin ()
+  - P ()
+  - catch ()
+  - while ()
+  - then ()
+  - Promise ()
+  - forEach ()
+  - findIndex ()
+  - decodeAudioData ()
+  - setTimeout ()
+  - addEventListener ()
+  - codeProcessor ()
+    - onload (main.ts)
+      - onunload ()
+      - codeProcessorMml ()
+      - codeProcessorChord ()
+  - togglePlayingHighlight ()
+    - rmNoteHighlights ()
+    - rmAllHighlights ()
+    - constructor (undefined)
+
+---
+Generated at: 2025-11-10 10:24:57 JST
