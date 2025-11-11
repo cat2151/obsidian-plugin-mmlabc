@@ -1,4 +1,4 @@
-Last updated: 2025-11-10
+Last updated: 2025-11-11
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -228,6 +228,7 @@ Last updated: 2025-11-10
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
+e04a2ca Update project summaries (overview & development status) [auto]
 ba839de Issueノート生成ワークフローを、github-actionsリポジトリの共通ワークフロー側を呼ぶようにしたので、重複した古い方を削除
 1251bf3 GitHub Actionsのワークフローを追加: 日次プロジェクトサマリー、イシューノート生成、README自動翻訳
 9d3ad6a Merge branch 'main' of github.com:cat2151/obsidian-plugin-mmlabc into main
@@ -239,12 +240,13 @@ ba839de Issueノート生成ワークフローを、github-actionsリポジト�
 .github/workflows/call-translate-readme.yml
 README.md
 _config.yml
+generated-docs/development-status-generated-prompt.md
+generated-docs/development-status.md
+generated-docs/project-overview-generated-prompt.md
+generated-docs/project-overview.md
 issue-notes/2.md
 issue-notes/3.md
-main.js
-manifest.json
-mml/chord2mml.js
 
 
 ---
-Generated at: 2025-11-10 10:24:04 JST
+Generated at: 2025-11-11 09:09:31 JST
