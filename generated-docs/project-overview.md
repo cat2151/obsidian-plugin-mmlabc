@@ -1,42 +1,21 @@
-Last updated: 2025-11-11
+Last updated: 2025-12-02
 
 # Project Overview
 
 ## プロジェクト概要
-- ObsidianノートでMML（Music Macro Language）とコード進行を五線譜表示し、演奏できます。
-- 作曲のアイデアスケッチや音楽理論学習を支援し、直感的な音楽表現を可能にします。
-- 既存の「Obsidian ABC.JS plugin」を基盤に、MMLとコード進行の入力を拡張しています。
+- ObsidianでMMLやコード進行を記述し、五線譜表示と再生を可能にするプラグイン。
+- 音楽のアイデアスケッチに最適で、複数ペインでのフレーズやコード進行の再生もサポート。
+- 外部のMML/コード進行トランスパイラとabcjsを利用し、楽譜描画と音源再生を実現。
 
 ## 技術スタック
-- フロントエンド:
-    - **Obsidian**: プラグインが動作するノートアプリケーションのプラットフォーム。ユーザーのノート内で直接音楽表現を可能にします。
-    - **abcjs (6.2.2)**: プレーンテキストのABC Music Notationから楽譜の描画（SVG）とPCMシンセサイザーによる音楽演奏を可能にするJavaScriptライブラリ。
-- 音楽・オーディオ:
-    - **MML (Music Macro Language)**: 音符の並びやテンポなどをテキストで記述する音楽記述言語。
-    - **Chord notation**: C, F, G7などのコード名や、ローマ数字（V7, I）でコード進行を表記する記法。
-    - **mml2abc**: MML形式の入譜データを`abcjs`が解釈できるABC Music Notation形式に変換するトランスパイラ。
-    - **chord2mml**: コード進行記法をMML形式に変換するトランスパイラ。
-- 開発ツール:
-    - **TypeScript (4.8.4)**: JavaScriptに型アノテーションを追加したプログラミング言語。大規模なプロジェクトの可読性と保守性を向上させます。
-    - **Rollup (2.79.1)**: JavaScriptモジュールバンドラー。TypeScriptで書かれた複数のソースファイルをObsidianプラグインとして動作する単一のJavaScriptファイルに効率的にバンドルします。
-    - **@rollup/plugin-commonjs (15.1.0)**: CommonJS形式のモジュールをESモジュール形式に変換し、Rollupでバンドルできるようにするプラグイン。
-    - **@rollup/plugin-node-resolve (9.0.0)**: `node_modules`ディレクトリにインストールされた依存関係をRollupが解決できるようにするプラグイン。
-    - **@rollup/plugin-typescript (9.0.2)**: Rollupビルドプロセス中にTypeScriptファイルをJavaScriptにトランスパイルするプラグイン。
-    - **tslib (2.4.1)**: TypeScriptコンパイラが生成するランタイムヘルパー関数（例: クラス継承や非同期処理のサポート）を提供します。
-- テスト:
-    - N/A (プロジェクト情報にテスト関連の具体的な技術スタックの記載はありません)
-- ビルドツール:
-    - **Rollup**: 前述の通り、本プロジェクトの主要なビルドツールです。
-    - **@rollup/plugin-typescript**: TypeScriptからJavaScriptへの変換を行います。
-    - **@rollup/plugin-node-resolve**: 依存モジュールの解決を行います。
-    - **@rollup/plugin-commonjs**: CommonJSモジュールの変換を行います。
-- 言語機能:
-    - **TypeScript**: 型安全なコーディングを可能にし、開発効率とコード品質を高めます。
-    - **JavaScript**: プラグインの実行環境の基盤となる言語であり、トランスパイル後の主要なコードです。
-- 自動化・CI/CD:
-    - N/A (プロジェクト情報に自動化・CI/CD関連の具体的な技術スタックの記載はありません)
-- 開発標準:
-    - N/A (プロジェクト情報に開発標準関連の具体的な技術スタックの記載はありません)
+- フロントエンド: Obsidian (プラットフォームとしてプラグインを実行), abcjs (楽譜描画、UIインタラクション、JavaScriptベースの楽譜エンジン)
+- 音楽・オーディオ: MML (Music Macro Language), Chord notation (コード進行記法), abcjs (音楽記法解析、PCMソフトシンセによる音源再生), mml2abc (MMLをABC Music notationに変換), chord2mml (コード進行をMMLに変換)
+- 開発ツール: TypeScript (静的型付けJavaScript), Rollup (JavaScriptモジュールバンドラー), @rollup/plugin-typescript, @rollup/plugin-node-resolve, @rollup/plugin-commonjs (Rollup用プラグイン), TSLib (TypeScriptのヘルパー関数), @types/node (Node.jsの型定義)
+- テスト: (該当情報なし)
+- ビルドツール: Rollup (モジュールを統合し最適化), TypeScript (TypeScriptコードをJavaScriptにコンパイル)
+- 言語機能: JavaScript (コア言語), TypeScript (JavaScriptのスーパーセット)
+- 自動化・CI/CD: (該当情報なし。Obsidian BRATはプラグインの更新手段であり、開発プロセスの一部ではないため含めない)
+- 開発標準: (該当情報なし)
 
 ## ファイル階層ツリー
 ```
@@ -49,6 +28,7 @@ Last updated: 2025-11-11
 📄 example.png
 📄 example_tablatures.jpg
 📁 generated-docs/
+🌐 googled947dc864c270e07.html
 📁 issue-notes/
   📖 2.md
   📖 3.md
@@ -57,6 +37,7 @@ Last updated: 2025-11-11
 📊 manifest.json
 📁 mml/
   📜 chord2mml.js
+  📄 mml2abc.mjs
 📘 note_highlighter.ts
 📊 package-lock.json
 📊 package.json
@@ -71,81 +52,86 @@ Last updated: 2025-11-11
 ```
 
 ## ファイル詳細説明
-- **`.gitignore`**: Gitによるバージョン管理から除外するファイルやディレクトリを指定します。
-- **`LICENSE`**: プロジェクトのライセンス情報を記載したファイルです。
-- **`README.md`**: プロジェクトの概要、機能、使用方法、インストール手順などを説明する主要なドキュメントです。
-- **`README_original.md`**: このプラグインのフォーク元である「Obsidian ABC.JS plugin」のオリジナルREADMEです。
-- **`_config.yml`**: GitHub Pagesなどの設定ファイルである可能性があります。
-- **`cfg.ts`**: プラグインの共通設定や定数を定義するTypeScriptファイルです。`abcjs`ライブラリに関連する設定が含まれることがあります。
-- **`example.png`**, **`example_tablatures.jpg`**: プラグインの機能や表示例を示す画像ファイルです。
-- **`generated-docs/`**: 自動生成されたドキュメントなどが格納されるディレクトリです。
-- **`issue-notes/2.md`**, **`issue-notes/3.md`**: 開発中に発生した特定の課題や検討事項について記録されたノートファイルです。
-- **`main.js`**: `main.ts`からトランスパイルされ、`abcjs`ライブラリやMML/コード進行の変換ロジックがバンドルされた、プラグインの主要な実行ファイル（JavaScript）です。非常に多くの関数とロジックを含みます。
-- **`main.ts`**: ObsidianプラグインのメインエントリーポイントとなるTypeScriptファイルです。MMLおよびコード進行のコードブロックを処理し、`abcjs`による譜面描画と再生要素の組み込みを行います。
-- **`manifest.json`**: Obsidianプラグインのメタデータ（プラグインID、名称、作者、バージョンなど）を定義するファイルです。
-- **`mml/chord2mml.js`**: コード進行記法（例: `C F`）をMML形式に変換するためのトランスパイラ（JavaScript）です。
-- **`note_highlighter.ts`**: 音楽再生中に現在演奏されている音符（ノート）を視覚的にハイライト表示するロジックを管理するTypeScriptファイルです。
-- **`package-lock.json`**: プロジェクトの依存関係ツリーと正確なバージョン情報、ハッシュ値を記録するファイルで、一貫性のあるビルドを保証します。
-- **`package.json`**: プロジェクトのメタデータ（名前、バージョン、スクリプトなど）と、開発・実行に必要な依存関係（ライブラリ）を定義するファイルです。
-- **`playback_element.ts`**: 音楽の再生・停止を制御するUI要素（再生ボタンなど）の生成と、音楽表示要素の初期化ロジックを実装するTypeScriptファイルです。`abcjs`の音声再生機能と連携します。
-- **`rollup.config.js`**: Rollupモジュールバンドラーの設定ファイルです。プロジェクトのビルドプロセス（TypeScriptのコンパイル、モジュールのバンドルなど）を定義します。
-- **`styles.css`**: プラグインが生成するUI要素（五線譜、再生ボタン、ハイライトなど）のスタイルを定義するCSSファイルです。
-- **`tsconfig.json`**: TypeScriptコンパイラの設定ファイルです。コンパイルオプション（ターゲットECMAScriptバージョン、モジュール形式など）を指定します。
-- **`typeDefs/abcjs.d.ts`**: `abcjs`ライブラリの型定義ファイルです。TypeScriptプロジェクトにおいて、`abcjs`の関数やオブジェクトの構造に型情報を提供し、開発中のエラー検出やコード補完を支援します。
-- **`versions.json`**: Obsidianプラグインのバージョン互換性情報、特にObsidian APIバージョンとの対応関係を記録するファイルです。
-- **`yarn.lock`**: Yarnパッケージマネージャーが生成するファイルで、`package-lock.json`と同様に依存関係の正確なバージョンを記録し、ビルドの再現性を保証します。
+- **.gitignore**: Gitバージョン管理システムが追跡しないファイルやディレクトリを指定する設定ファイルです。
+- **LICENSE**: 本プロジェクトのソフトウェアライセンス情報が記載されています。
+- **README.md**: プロジェクトの概要、機能、使用方法、インストール手順などが記述されたメインのドキュメントファイルです。
+- **README_original.md**: フォーク元である「Obsidian ABC.JS plugin」の元のREADMEファイルです。プロジェクトの背景と依存関係を理解する上で重要です。
+- **_config.yml**: GitHub Pagesなどのウェブサイト設定を定義するYAML形式のファイルです。
+- **cfg.ts**: プロジェクト全体で使用される設定や定数を定義するTypeScriptファイルです。`abcjs`に関連する設定が含まれる可能性があります。
+- **example.png**: プラグインが生成する五線譜やその他の機能を示すスクリーンショット画像です。
+- **example_tablatures.jpg**: タブラチュア表示の具体的な例を示す画像ファイルです。
+- **generated-docs/**: APIドキュメントなど、自動生成されたドキュメントが格納されるディレクトリです。
+- **googled947dc864c270e07.html**: Googleサイト認証用のHTMLファイルです。
+- **issue-notes/**: 開発中に発見された課題や検討事項に関するメモが格納されるディレクトリです。
+  - **2.md**: 特定の課題2に関する詳細なメモです。
+  - **3.md**: 特定の課題3に関する詳細なメモです。
+- **main.js**: Rollupによってバンドルされた、プラグインの主要なJavaScriptコードです。`main.ts`、`abcjs`ライブラリ、MML/Chordトランスパイラなど、プラグインの実行に必要な全ての機能が統合されており、非常に大規模です。
+- **main.ts**: ObsidianプラグインのエントリーポイントとなるTypeScriptファイルです。プラグインのロード/アンロード時の処理や、MMLおよびコード進行のコードブロックを処理するためのロジックが定義されています。
+- **manifest.json**: Obsidianプラグインのメタデータ（ID、バージョン、作者、説明など）を定義する必須ファイルです。
+- **mml/**: MML (Music Macro Language) およびコード進行の変換に関連するスクリプトが格納されるディレクトリです。
+  - **chord2mml.js**: コード進行記法をMML形式に変換するためのJavaScriptライブラリです。
+  - **mml2abc.mjs**: MML記法をABC Music notationに変換するためのJavaScriptライブラリです。
+- **note_highlighter.ts**: 音楽再生中に現在演奏されている音符をハイライト表示する機能に関連するTypeScriptファイルです。
+- **package-lock.json**: `package.json`で定義された依存関係の正確なバージョンと依存ツリーを記録し、ビルドの一貫性を保証するためのファイルです。
+- **package.json**: Node.jsプロジェクトのメタデータ、開発スクリプト、依存ライブラリ（`abcjs`など）を定義するファイルです。
+- **playback_element.ts**: Obsidianのコードブロック要素内で楽譜を描画し、オーディオ再生機能を提供するTypeScriptファイルです。エラーレンダリングやオーディオ有効化のロジックを含みます。
+- **rollup.config.js**: Rollupモジュールバンドラーの設定ファイルです。TypeScriptファイルをJavaScriptにコンパイルし、依存関係を解決して`main.js`を生成するビルドプロセスを定義します。
+- **styles.css**: プラグインによって表示される五線譜やUI要素の見た目をカスタマイズするためのCSSスタイルシートです。
+- **tsconfig.json**: TypeScriptコンパイラのオプション設定を定義するファイルです。
+- **typeDefs/**: TypeScriptの型定義ファイルが格納されるディレクトリです。
+  - **abcjs.d.ts**: `abcjs`ライブラリのTypeScript型定義ファイルであり、開発時に型安全なコーディングを支援します。
+- **versions.json**: Obsidianプラグインのバージョン履歴と互換性情報を管理するためのファイルです。
+- **yarn.lock**: Yarnパッケージマネージャーが使用する依存関係の正確なバージョンと依存ツリーを記録するファイルです。
 
 ## 関数詳細説明
-このプロジェクトは、`abcjs`という大規模な外部ライブラリを中核に利用しており、`main.js`ファイルにはこのライブラリの非常に多くの内部関数がバンドルされています。ここでは、プロジェクトの主要な機能に関わる関数、およびプラグイン固有のロジックを担う関数を中心に説明します。
-
--   **`onload()` (main.ts)**
-    -   **役割**: Obsidianプラグインがロードされた際に一度だけ実行される初期化関数。
-    -   **機能**: MMLおよびコード進行のコードブロックをObsidianに登録し、それらのコンテンツを処理するためのプロセッサを設定します。これにより、ユーザーが特定のコードブロックを記述するとプラグインの機能が有効になります。
--   **`onunload()` (main.ts)**
-    -   **役割**: Obsidianプラグインがアンロードされる際に実行されるクリーンアップ関数。
-    -   **機能**: プラグインが使用していたリソース（登録したコードブロックプロセッサなど）を解放し、Obsidian環境をクリーンな状態に戻します。
--   **`codeProcessor(source, el, ctx)` (main.ts)**
-    -   **役割**: MMLまたはコード進行のコードブロックコンテンツを処理する汎用関数。
-    -   **引数**: `source` (コードブロックのテキスト内容), `el` (コンテンツを描画するHTML要素), `ctx` (MarkdownPostProcessorContext)。
-    -   **機能**: `source`を適切なトランスパイラ（`mml2abc`または`chord2mml`）で変換し、その結果を`abcjs`で五線譜として`el`に描画します。また、譜面の下に音楽再生コントローラーを追加し、再生可能にします。
--   **`codeProcessorMml(source, el, ctx)` (main.ts)**
-    -   **役割**: MMLコードブロック専用の処理関数。
-    -   **機能**: `source`のMMLコンテンツを`mml2abc`トランスパイラでABC Music Notationに変換し、`codeProcessor`に処理を委譲します。
--   **`codeProcessorChord(source, el, ctx)` (main.ts)**
-    -   **役割**: コード進行コードブロック専用の処理関数。
-    -   **機能**: `source`のコード進行コンテンツを`chord2mml`トランスパイラでMMLに変換し、さらに`mml2abc`を経由してABC Music Notationに変換した後、`codeProcessor`に処理を委譲します。
--   **`constructor(abcViewer)` (note_highlighter.ts)**
-    -   **役割**: `NoteHighlighter`クラスのコンストラクタ。
-    -   **引数**: `abcViewer` (`abcjs`のViewerオブジェクト)。
-    -   **機能**: 音楽再生中のノートをハイライト表示する機能の初期設定を行います。`abcjs`のイベントリスナーを登録し、再生中のノート情報を取得できるように準備します。
--   **`togglePlayingHighlight(event)` (note_highlighter.ts)**
-    -   **役割**: 音楽再生中の特定のノートに対してハイライト表示を切り替える関数。
-    -   **引数**: `event` (`abcjs`から送られる再生イベントオブジェクト)。
-    -   **機能**: `event`に含まれるノート情報に基づき、該当する楽譜上のノート要素にハイライトCSSクラスを適用または削除します。
--   **`rmNoteHighlights()` (note_highlighter.ts)**
-    -   **役割**: 現在表示されているノートのハイライトを全て削除する関数。
-    -   **機能**: 以前にハイライトされた全てのノート要素からハイライトCSSクラスを削除し、表示をクリアします。
--   **`constructor(containerEl)` (playback_element.ts)**
-    -   **役割**: `PlaybackElement`クラスのコンストラクタ。
-    -   **引数**: `containerEl` (この要素が追加される親HTML要素)。
-    -   **機能**: 音楽再生コントローラー（再生・停止ボタン、エラー表示エリアなど）のDOM要素を生成し、初期状態を設定します。
--   **`enableAudioPlayback(abcString)` (playback_element.ts)**
-    -   **役割**: 指定されたABC Music Notation文字列に基づいて音声再生機能を有効にする関数。
-    -   **引数**: `abcString` (ABC Music Notation形式の音楽データ)。
-    -   **機能**: `abcjs`のシンセサイザー機能を初期化し、提供された`abcString`を解析して音声データに変換します。これにより、ユーザーは再生ボタンをクリックして音楽を聴けるようになります。
--   **`renderError(error)` (playback_element.ts)**
-    -   **役割**: プラグイン内で発生したエラーメッセージをUI上に表示する関数。
-    -   **引数**: `error` (エラーオブジェクトまたは文字列)。
-    -   **機能**: 再生コントローラーの下などにエラーメッセージを表示するテキスト要素を作成または更新し、ユーザーに問題を通知します。
--   **`createAbc()` (main.js)**
-    -   **役割**: `abcjs`ライブラリのコア機能の一部で、ABC Music Notationを解釈し、五線譜のSVG画像を生成します。
-    -   **機能**: 入力された音楽記法データから、音符、休符、拍子、調号、歌詞などの要素を配置し、視覚的に表現される楽譜を作成します。
--   **`doPlay()` (main.js)**
-    -   **役割**: `abcjs`ライブラリのコア機能の一部で、生成された音楽データを音声として再生する処理を開始します。
-    -   **機能**: 内部のPCMシンセサイザーを制御し、楽譜の各音符に対応する音を生成し、オーディオ出力を行います。
--   **`peg$parseMMLs()`, `peg$parseMML()`, `peg$parseNOTE()`, `peg$parseCHORD()` (main.js)**
-    -   **役割**: これらはMMLおよびコード進行記法のパーサー（構文解析器）に関連する内部関数です。`mml2abc`や`chord2mml`のロジックがバンドルされた結果です。
-    -   **機能**: テキスト形式のMMLやコード進行文字列を、プログラムが扱える内部データ構造（抽象構文木など）に変換します。これにより、後続の変換処理や描画処理が可能になります。
+- **onload (main.ts)**
+  - 役割: Obsidianプラグインが有効化される際に実行されるエントリーポイント。
+  - 機能: プラグインの初期設定を行い、MMLとコード進行のコードブロックを処理するためのカスタムプロセッサをObsidianに登録します。
+- **onunload (main.ts)**
+  - 役割: Obsidianプラグインが無効化またはアンロードされる際に実行されるクリーンアップ処理。
+  - 機能: 登録されたコードブロックプロセッサを解除し、リソースを解放することで、プラグインの終了処理を適切に行います。
+- **codeProcessorMml (main.ts)**
+  - 役割: `mml`コードブロックの内容を処理する。
+  - 機能: コードブロック内のMMLテキストを解析し、それを五線譜として表示し、再生可能な音楽に変換します。
+- **codeProcessorChord (main.ts)**
+  - 役割: `chord`コードブロックの内容を処理する。
+  - 機能: コードブロック内のコード進行テキストを解析し、それを五線譜として表示し、再生可能な音楽に変換します。
+- **constructor (playback_element.ts)**
+  - 役割: `PlaybackElement`クラスの新しいインスタンスを初期化する。
+  - 機能: コードブロックに表示される音楽要素（五線譜や再生ボタンなど）を構築し、イベントリスナーを設定します。
+- **renderError (playback_element.ts)**
+  - 役割: 音楽の描画や再生中に発生したエラーを表示する。
+  - 機能: エラーメッセージをユーザーインターフェースに分かりやすく表示し、問題解決の手助けをします。
+- **enableAudioPlayback (playback_element.ts)**
+  - 役割: 楽譜のオーディオ再生機能を有効化する。
+  - 機能: 再生ボタンなどを活性化し、ユーザーが楽譜を聴けるようにします。
+- **togglePlayingHighlight (note_highlighter.ts)**
+  - 役割: 音楽再生中に演奏されている音符のハイライト表示を切り替える。
+  - 機能: 現在演奏中の音符を視覚的に強調し、ユーザーが楽譜を追跡しやすくします。
+- **rmAllHighlights (note_highlighter.ts)**
+  - 役割: 表示されている全ての音符ハイライトを削除する。
+  - 機能: 再生終了時や楽譜の変更時などに、ハイライト表示をクリアします。
+- **createAbc (main.js)**
+  - 役割: MMLまたはコード進行テキストをABC Music notationに変換する。
+  - 機能: ユーザーの入力内容を、五線譜描画ライブラリ`abcjs`が解釈できる形式に変換する中心的な処理です。
+- **draw (main.js)**
+  - 役割: ABC Music notationデータに基づいて五線譜をSVG形式で描画する。
+  - 機能: 音楽の視覚的な表現を生成し、Obsidianノート内に表示します。
+- **CreateSynth (main.js)**
+  - 役割: 音楽再生のためのPCMソフトシンセサイザーインスタンスを生成する。
+  - 機能: 楽譜データから実際の音を生成するためのオーディオエンジンを準備します。
+- **doPlay (main.js)**
+  - 役割: 楽譜のオーディオ再生を開始する。
+  - 機能: シンセサイザーを制御し、指定された楽譜データを元に音楽を演奏します。
+- **__extends, __awaiter, __generator (main.js)**
+  - 役割: TypeScriptのコードをJavaScriptにコンパイルする際に生成されるヘルパー関数。
+  - 機能: クラスの継承、非同期処理（async/await）、ジェネレーター関数の機能的な互換性を古いJavaScript環境で提供します。これらはプラグインの内部的な動作を支える基盤です。
+- **peg$parse* 関数群 (main.js, mml/chord2mml.js)**
+  - 役割: MMLやコード進行のテキストを解析し、構造化されたデータに変換するパーサー関連の関数。
+  - 機能: ユーザーが入力した音楽記法の文字列を解釈し、プログラムで扱える形式に変換します。
+- **t, e, n, ... (main.js, mml/chord2mml.js)**
+  - 役割: `mml2abc`や`chord2mml`などのバンドルされたライブラリ内部で使われる、ミニファイ化された（短縮された）関数。
+  - 機能: これらの関数は、MMLやコード進行の変換、ABC Music notationの生成といった、プラグインの核心的な音楽処理ロジックを構成します。
 
 ## 関数呼び出し階層ツリー
 ```
@@ -607,12 +593,24 @@ Last updated: 2025-11-11
       - A ()
       - g ()
       - m ()
+      - MusicPlugin ()
       - function ()
+      - P ()
+      - catch ()
       - switch ()
       - if ()
+      - while ()
+      - then ()
+      - Promise ()
       - for ()
+      - forEach ()
+      - findIndex ()
       - filter ()
+      - commonly ()
       - sort ()
+      - decodeAudioData ()
+      - setTimeout ()
+      - addEventListener ()
       - map ()
       - replace ()
       - return ()
@@ -624,9 +622,15 @@ Last updated: 2025-11-11
   - Promise ()
   - forEach ()
   - findIndex ()
+  - filter ()
+  - commonly ()
+  - sort ()
   - decodeAudioData ()
   - setTimeout ()
   - addEventListener ()
+  - map ()
+  - replace ()
+  - return ()
   - codeProcessor ()
     - onload (main.ts)
       - onunload ()
@@ -638,4 +642,4 @@ Last updated: 2025-11-11
     - constructor (undefined)
 
 ---
-Generated at: 2025-11-11 09:10:25 JST
+Generated at: 2025-12-02 09:10:27 JST

@@ -1,59 +1,69 @@
-Last updated: 2025-11-11
+Last updated: 2025-12-02
 
 # Development Status
 
 ## 現在のIssues
-- 現在、オープン中のIssueは存在しません。プロジェクトは安定しており、直接的なバグや未解決の機能要求はありません。
-- 直近の活動は主にGitHub Actionsワークフローの整理と追加に集中し、プロジェクトの自動化機能が大幅に強化されました。
-- これにより、日次プロジェクトサマリーやイシューノート生成、README自動翻訳といった機能が導入され、開発プロセスの効率化が図られています。
+- 現在、GitHub上にオープンされている公式なIssueはありません。
+- プロジェクトのタスクや課題は、`issue-notes` ディレクトリ内のMarkdownファイルとして管理されている可能性があります。
+- そのため、この開発状況レポートには、`issue-notes` ファイルの情報はまだ反映されていません。
 
 ## 次の一手候補
-1. 自動生成される開発状況レポートの品質向上 [Issue #Next-1](../issue-notes/Next-1.md)
-   - 最初の小さな一歩: 現在生成されている `generated-docs/development-status.md` の内容と、それを生成するために使用されているプロンプトファイル `.github/actions-tmp/.github_automation/project_summary/prompts/development-status-prompt.md` を比較分析し、レポートの具体性、網羅性、および指示プロンプトへの追従度合いに関する改善点を特定する。
+1. `issue-notes` ディレクトリのMarkdownファイルをIssueとして認識し、開発状況レポートに反映させる [Issue #31](../issue-notes/31.md)
+   - 最初の小さな一歩: `.github/actions-tmp/.github_automation/project_summary/scripts/development/IssueTracker.cjs` を開き、現在のIssue情報収集ロジックと、`issue-notes` のファイルフォーマットを分析する。
+   - Agent実行プロンプ:
+     ```
+     対象ファイル: .github/actions-tmp/.github_automation/project_summary/scripts/development/IssueTracker.cjs, .github/actions-tmp/issue-notes/
+
+     実行内容:
+     `IssueTracker.cjs` がGitHub APIを使用してIssueを収集している現状を分析し、GitHub APIだけでなく、`.github/actions-tmp/issue-notes/` ディレクトリ内のMarkdownファイルをローカルIssueとして認識・解析する機能を追加する。具体的には、各Markdownファイルからタイトル、番号（ファイル名から）、ステータス（もしファイル内容で定義されていれば）を抽出するロジックを検討し、`IssueTracker.cjs` に統合する。
+
+     確認事項:
+     1. `IssueTracker.cjs` の既存のIssue収集ロジックと、GitHub APIの使用方法。
+     2. `issue-notes/` ディレクトリ内のMarkdownファイルの命名規則（例: `10.md`）と、Issueのタイトルや詳細がファイル内でどのように記述されているかのフォーマット。
+     3. ローカルIssueとして抽出する際に、既存のGitHub Issueとの重複や競合が発生しないか、あるいはどのように区別するか。
+
+     期待する出力:
+     `IssueTracker.cjs` にローカルIssue収集機能を追加するための具体的なコード変更案をJavaScript（CommonJS）形式で記述し、その変更によってどのように`issue-notes`のMarkdownファイルがIssueとして認識され、開発状況レポートに含められるようになるかを説明するMarkdownドキュメント。
+     ```
+
+2. `.github/actions-tmp` 内のワークフローを整理し、メインワークフローと統合/モジュール化する [Issue #32](../issue-notes/32.md)
+   - 最初の小さな一歩: `.github/actions-tmp/.github/workflows/` ディレクトリ内の全ての `.yml` ファイルを一覧表示し、それぞれのファイルがどのようなトリガーで実行され、何をしているかを簡単にまとめる。
    - Agent実行プロンプト:
      ```
-     対象ファイル:
-     - `generated-docs/development-status.md`
-     - `.github/actions-tmp/.github_automation/project_summary/prompts/development-status-prompt.md`
+     対象ファイル: .github/actions-tmp/.github/workflows/ ディレクトリ内の全 *.yml ファイル, および .github/workflows/ ディレクトリ内の call-*.yml ファイル
 
-     実行内容: 上記2つのファイルを分析し、`generated-docs/development-status.md` が `development-status-prompt.md` の指示にどの程度従っているか、またレポートの改善点（例: 要約の簡潔さ、次の一手候補の具体性、Agent実行プロンプトの網羅性など）を洗い出してください。
+     実行内容:
+     1. `.github/actions-tmp/.github/workflows/` 内の各ワークフローの目的とトリガーを特定する。
+     2. ルートディレクトリの `.github/workflows/call-*.yml` ワークフローと、対応する `.github/actions-tmp/.github/workflows/` 内のワークフローとの関連性を分析する。
+     3. 共通のステップやロジックが存在するかを評価し、再利用可能なワークフロー（`workflow_call`）に変換できる候補を特定し、ワークフロー構造の最適化案を検討する。
 
-     確認事項: `development-status-prompt.md` 内の各項目が、生成された `development-status.md` でどのように反映されているか、特に「生成するもの」「生成しないもの」「Agent実行プロンプト生成ガイドライン」の遵守状況を確認してください。
+     確認事項:
+     1. 各ワークフローの現在の依存関係と実行順序。
+     2. 外部から呼び出される際に必要な入力パラメータやシークレット。
+     3. GitHub Actionsのベストプラクティス（特にワークフローの再利用性に関するもの）。
 
-     期待する出力: `development-status.md` の具体的な改善提案をMarkdown形式で出力してください。提案には、プロンプトの変更案や生成スクリプトの調整案を含めても構いません。
+     期待する出力:
+     ワークフローの整理案をMarkdown形式で記述。具体的には、どのワークフローを統合またはモジュール化すべきか、その理由と、推奨される新しいファイル構造、および`workflow_call`を利用した場合のサンプルコードを含む。
      ```
 
-2. 日次プロジェクトサマリー生成ワークフローの動作確認とドキュメント化 [Issue #Next-2](../issue-notes/Next-2.md)
-   - 最初の小さな一歩: `call-daily-project-summary.yml` ワークフローが正しく実行され、`generated-docs/project-overview.md` と `generated-docs/development-status.md` が期待通りに更新されるかを確認する。また、関連する設定や前提条件を特定する。
+3. 生成された開発状況レポートをGitHub Pagesに自動デプロイする仕組みを構築する [Issue #33](../issue-notes/33.md)
+   - 最初の小さな一歩: `_config.yml` ファイルの内容を確認し、GitHub Pagesの設定（`baseurl` など）と、現在どのディレクトリが公開対象になっているかを確認する。
    - Agent実行プロンプト:
      ```
-     対象ファイル:
-     - `.github/workflows/call-daily-project-summary.yml`
-     - `generated-docs/project-overview.md`
-     - `generated-docs/development-status.md`
+     対象ファイル: .github/workflows/call-daily-project-summary.yml, _config.yml, .github/actions-tmp/generated-docs/ ディレクトリ
 
-     実行内容: `.github/workflows/call-daily-project-summary.yml` のワークフロー定義を分析し、その実行フロー、依存関係、および最終的な出力ファイル (`generated-docs/project-overview.md`, `generated-docs/development-status.md`) への影響を説明してください。また、このワークフローを初めて利用するユーザーが必要とするであろう設定手順や注意点を抽出し、簡単なセットアップガイドの草案を作成してください。
+     実行内容:
+     1. `call-daily-project-summary.yml` が開発状況レポート (`generated-docs/development-status.md`) を生成するプロセスを分析する。
+     2. 生成されたレポートがGitHub Pagesに自動的にデプロイされるための既存の仕組みが存在するか確認する。
+     3. もし存在しない場合、または不完全な場合、`generated-docs` ディレクトリの内容をGitHub Pagesとして公開するためのGitHub Actionsワークフローの追加または修正案を検討する。
 
-     確認事項: ワークフローが参照するスクリプトやアクション（例: `check-recent-human-commit.yml`）との連携、および必要な環境変数やシークレットの有無を確認してください。
+     確認事項:
+     1. GitHubリポジトリのGitHub Pages設定（公開ソースブランチ、公開ディレクトリ）。
+     2. `_config.yml` がGitHub Pagesの表示にどのように影響するか、特にパス解決について。
+     3. 既存のGitHub Actionsで成果物をデプロイするメカニズムやGitHub Pagesへのデプロイアクション（例: `peaceiris/actions-gh-pages`）。
 
-     期待する出力: `call-daily-project-summary.yml` ワークフローの機能概要、期待される出力、および外部プロジェクトで利用する際のセットアップガイドの草案をMarkdown形式で生成してください。
-     ```
-
-3. Callgraph機能の現状評価と改善計画 [Issue #Next-3](../issue-notes/Next-3.md)
-   - 最初の小さな一歩: Callgraph機能の導入ドキュメント (`.github/actions-tmp/.github_automation/callgraph/docs/callgraph.md`) と、関連するワークフロー `.github/workflows/call-callgraph.yml` をレビューし、機能の目的、現在の実装状況、および想定される利用シナリオを理解する。
-   - Agent実行プロンプト:
-     ```
-     対象ファイル:
-     - `.github/actions-tmp/.github_automation/callgraph/docs/callgraph.md`
-     - `.github/actions-tmp/.github_automation/callgraph/scripts/*.cjs` (全般)
-     - `.github/workflows/call-callgraph.yml`
-
-     実行内容: Callgraph機能の現状を評価し、それがプロジェクト内でどのように活用できるか、または改善の余地があるかを分析してください。特に、CodeQLクエリ (`callgraph.ql`) とそれを利用するスクリプト群が、どの程度汎用的かつ効果的に機能しているかを検討してください。
-
-     確認事項: Callgraphが生成する `generated-docs/callgraph.html` (またはそれに相当する出力) の存在と、その出力形式が意図したものになっているかを確認してください。また、CodeQLのセットアップ要件についても考慮してください。
-
-     期待する出力: Callgraph機能の現在の課題、潜在的な利用ケース、および今後の改善に向けた提案をMarkdown形式で出力してください。提案には、具体的なスクリプト変更案やドキュメント更新案を含めても構いません。
-     ```
+     期待する出力:
+     生成されたレポートをGitHub Pagesに自動デプロイするためのGitHub ActionsワークフローのYAMLファイル（例: `deploy-docs.yml`）のコードブロックと、その設定方法に関する詳細なMarkdownドキュメント。
 
 ---
-Generated at: 2025-11-11 09:10:05 JST
+Generated at: 2025-12-02 09:09:39 JST

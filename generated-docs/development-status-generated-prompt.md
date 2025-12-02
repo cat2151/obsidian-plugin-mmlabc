@@ -1,4 +1,4 @@
-Last updated: 2025-11-11
+Last updated: 2025-12-02
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -161,6 +161,7 @@ Last updated: 2025-11-11
 - .github/actions-tmp/generated-docs/project-overview-generated-prompt.md
 - .github/actions-tmp/generated-docs/project-overview.md
 - .github/actions-tmp/generated-docs/style.css
+- .github/actions-tmp/googled947dc864c270e07.html
 - .github/actions-tmp/issue-notes/10.md
 - .github/actions-tmp/issue-notes/11.md
 - .github/actions-tmp/issue-notes/12.md
@@ -202,6 +203,7 @@ Last updated: 2025-11-11
 - cfg.ts
 - example.png
 - example_tablatures.jpg
+- googled947dc864c270e07.html
 - issue-notes/2.md
 - issue-notes/3.md
 - main.js
@@ -228,25 +230,23 @@ Last updated: 2025-11-11
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
-e04a2ca Update project summaries (overview & development status) [auto]
-ba839de Issueノート生成ワークフローを、github-actionsリポジトリの共通ワークフロー側を呼ぶようにしたので、重複した古い方を削除
-1251bf3 GitHub Actionsのワークフローを追加: 日次プロジェクトサマリー、イシューノート生成、README自動翻訳
-9d3ad6a Merge branch 'main' of github.com:cat2151/obsidian-plugin-mmlabc into main
-1cc42a5 jekyll settings
+9ab86fc Google検索にindexさせる用
+8f93bf2 Google検索にindexさせる用
 
 ### 変更されたファイル:
 .github/workflows/call-daily-project-summary.yml
 .github/workflows/call-issue-note.yml
 .github/workflows/call-translate-readme.yml
-README.md
+.github/workflows/issue-note.yml
 _config.yml
 generated-docs/development-status-generated-prompt.md
 generated-docs/development-status.md
 generated-docs/project-overview-generated-prompt.md
 generated-docs/project-overview.md
+googled947dc864c270e07.html
 issue-notes/2.md
 issue-notes/3.md
 
 
 ---
-Generated at: 2025-11-11 09:09:31 JST
+Generated at: 2025-12-02 09:09:18 JST

@@ -1,4 +1,4 @@
-Last updated: 2025-11-11
+Last updated: 2025-12-02
 
 
 # プロジェクト概要生成プロンプト（来訪者向け）
@@ -168,6 +168,7 @@ V7 I
 📄 example.png
 📄 example_tablatures.jpg
 📁 generated-docs/
+🌐 googled947dc864c270e07.html
 📁 issue-notes/
   📖 2.md
   📖 3.md
@@ -193,6 +194,10 @@ V7 I
 **cfg.ts** (28行, 918バイト)
   - 関数: なし
   - インポート: abcjs
+
+**googled947dc864c270e07.html** (1行, 53バイト)
+  - 関数: なし
+  - インポート: なし
 
 **main.js** (25014行, 4448063バイト)
   - 関数: __extends, __, __awaiter, adopt, fulfilled, rejected, step, __generator, verb, getLineEndTimings, hideMeasures, disappearMeasuresAfter, disappearMeasuresBefore, measureCallback, getLineAndMeasure, setCursor, initializeFonts, processNumberOnly, parseStretchLast, transposeChordName, createKeyReverse, relativeMajor$2, relativeMode$1, transposeKey$1, keyAccidentals$1, accidentalChange, letter_to_overlay, durationOfMeasure, wrapLines, addLineBreaks, findLineBreaks, freeFormLineBreaks, clone, oneTry, optimizeLineWidths, fixedMeasureLineBreaks, getRevisedTuneParams, calcLineWraps, setDynamics, numNotesToDecoration, endingVolume, insertTempoChanges, chordVoiceOffThisBar, getTrackTitle, interpretTempo, interpretMeter, removeNaturals, addKey, addMeter, addIfDifferent, pitchesToPerc, setChannel, chordTrackEmpty, timeToRealTime, durationRounded, preProcess, getBeatFraction, findChord, calcBeat, processVolume, processChord, findNoteModifications, doModifiedNotes, writeNote, getRealDuration, adjustPitch, setKeySignature, processGraceNotes, writeGraceNotes, adjustForMicroTone, extractOctave, extractNote, interpretChord, chordNotes, writeBoom, writeChick, resolveChords, normalizeDrumDefinition, alignDrumToMeter, writeDrum, findOctaves, delineTune, findMismatchKeys, replacer, addMeterToVoices, addKeyToVoices, addClefToVoices, addFontToVoices, objEqual, cloneLine, copy, computePickupLength, addVerticalInfo, makeSortedArray, skipTies, addEndPoints, findLastBar, fixTitles, cleanUpSlursInLine, fixClefPlacement, wrapMusicLines, getNextMusicLine, addPositioning, addFont, appendLastMeasure, addHintMeasure, addHintMeasures, StringTablature, TabCommon, VoiceElement, AbsoluteElement, RelativeElement, isObject, cloneObject, cloneAbsolute, cloneAbsoluteAndRelatives, buildTabAbsolute, lyricsDim, TabAbsoluteElements, getInitialStaffSize, buildRelativeTabNote, getXGrace, graceInRest, convertToNumber, buildGraceRelativesForRest, initSpecialY, getLyricHeight, buildTabName, TabRenderer, islastTabInStaff, getStaffNumbers, getParentStaffIndex, linkStaffAndTabs, isMultiVoiceSingleStaff, getNextTabPos, getLastStaff, checkVoiceKeySig, noteToMidi$2, midiToNote$1, TabNote, cloneNote, TabNotes, buildCapo, buildPatterns, buildSecond, sameString, handleChordNotes, noteToNumber, toNumber, invalidNumber, StringPatterns, ViolinPatterns, Plugin$1, GuitarPatterns, Plugin, callback, transposeOneTune, changeAllKeySigs, transposeVoices, createKeyAccidentals, setLetterDistance, transposeVoice, newKey, transposePitch, parseNote, replaceNote, replaceGrace, replaceChord, calcAdjustment, BeamElem, calcAverage, BraceElem, clefOffsets, DynamicDecoration, CrescendoElem, GlissandoElem, TieElem, Decoration, highestPitch, lowestPitch, compoundDecoration, incrementPlacement, getPlacement, textDecoration, symbolDecoration, leftDecoration, EndingElem, TempoElement, TripletElem, germanNote, translateChord, getBeamGroup, writeMeasureWidth, setAveragePitch, addRestToAbsElement, addIfNotExist, Svg, constructHLine, constructVLine, createSvg, setPaddingVariable, FreeText, Separator, Subtitle, addTextIf, TopText, BottomText, setupSelection, getCoord, elementFocused, keyboardDown, keyboardSelection, findElementInHistory, findElementByCoord, getBestMatchCoordinates, getTarget, getMousePosition, attachMissingTouchEventAttributes, mouseDown, mouseMove, mouseUp, setSelection, notifySelect, findNumber, clearSelection, rangeHighlight, getClassSet, setClassSet, addGlobalClass, removeGlobalClass, getBarYAt, minStem, calcSlant, calcDy, calcXPos, calcYPos, createStems, createAdditionalBeams, layoutTriplet, isAbove, heightAtMidpoint, xAtMidpoint, moveDecorations, placeInLane, setLaneForChord, numAnnotationsBelow, setLane, yAtNote, incTop, setUpperAndLowerVoiceElements, setUpperAndLowerAbsoluteElements, setUpperAndLowerCrescendoElements, setUpperAndLowerDynamicElements, setUpperAndLowerEndingElements, setUpperAndLowerTempoElement, setUpperAndLowerRelativeElements, VoiceElements, getExtraWidth, getMinWidth, checkLastBarX, finished, getDurationIndex, isSameStaff, getLeftEdgeOfStaff, addBraceSize, setBraceLocation, setLocation, calcHorizontalSpacing, centerWholeRests, Classes, GetFontAndAttr, GetTextSize, str_repeat, roundNumber, renderText, drawBrace, straightPath, curvyPath, curve, printPath, drawGlissando, lineLength, slope, getY$1, numSquigglies, segment, drawCrescendo, Group, printSymbol, kernSymbols, drawDynamics, drawTriplet, drawLine, drawBracket, drawEnding, drawTie, drawBeam, draw$1, getSlope, getY, printStem, printLine, printStaffLine, drawRelativeElement, scaleExistingElem, drawTempo, drawAbsolute, drawVoice, isNonSpacerRest, printStaff, printDebugBox, drawSeparator, nonMusic, drawStaffGroup, debugPrintGridItem, printBrace, addInvisibleMarker, boxAllElements, setPaperSize, Selectables, draw, engraveStaffLine, addStaffPadding, splitSvgIntoLines, duplicateSvg, resizeOuter, renderOne, doLineWrapping, registerAudioContext, activeAudioContext, supportsAudio, bufferToWave, setUint16, setUint32, centsToFactor, placeNote, CreateSynth, resolveData, setPan, addSwing, CreateSynthControl, buildDom, acResumerMiddleWare, doNext, attachListeners, playEvent, doPlay, SynthController, sleep, setAttributes, Midi, encodeString, keySignature, timeSignature, encodeHex, toHex, to7BitHex, toDurationHex, addNotes, isFunction, gatherAbcParams, NoteHighlighter, PlaybackElement, getNoteLengthAbc, decimalToFraction, updateSharpFlats, peg$subclass, C, peg$SyntaxError, peg$padEnd, hex, literalEscape, classEscape, describeExpectation, describeExpected, describeFound, peg$parse, text, peg$literalExpectation, peg$classExpectation, peg$endExpectation, peg$otherExpectation, peg$computePosDetails, peg$computeLocation, peg$fail, peg$buildStructuredError, peg$parseMMLs, peg$parseMML, peg$parseNOTE, peg$parseREST, peg$parseOCTAVE, peg$parseOCTAVE_UP, peg$parseOCTAVE_DOWN, peg$parseNOTE_LENGTH, peg$parseCHORD, peg$parsePROGRAM_CHANGE, peg$parseTEMPO, peg$parseVOLUME, peg$parseSTACCATO, peg$parseTRANSPOSE, peg$parseREPEAT, peg$parseINLINE_ABC, peg$parseTIME_SHIFT, peg$parseTRACK_SEPARATOR, peg$parsePITCH, peg$parseSHARP, peg$parseFLAT, peg$parseMINUS, peg$parseINTEGER, peg$parse_, initTrackParams, insertVolumeBeforeNoteOrRest, volume2abc, createAbc, postProcess, createCommonjsModule, commonjsRequire, t, e, n, o, s, a, _o, Ho, zo, Wo, Xo, Yo, Zo, $o, rs, ts, es, ns, os, ss, as, us, cs, is, fs, ls, hs, bs, u, c, i, f, l, h, b, v, d, p, A, g, m, MusicPlugin, function, P, catch, switch, if, while, then, Promise, for, forEach, findIndex, filter, commonly, sort, decodeAudioData, setTimeout, addEventListener, map, replace, return, codeProcessor
@@ -720,6 +725,7 @@ V7 I
 README.md
 README_original.md
 cfg.ts
+googled947dc864c270e07.html
 issue-notes/2.md
 issue-notes/3.md
 main.js
@@ -746,4 +752,4 @@ versions.json
 
 
 ---
-Generated at: 2025-11-11 09:09:32 JST
+Generated at: 2025-12-02 09:09:19 JST
